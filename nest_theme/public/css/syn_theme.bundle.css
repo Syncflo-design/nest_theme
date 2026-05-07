@@ -1,11 +1,20 @@
 /* ==============================================================
-   nest_theme — syn_theme.bundle.css (v0.2.0)
-   Single locked palette: Soft Professional, light + dark.
-   No density / font axes — just one tightened spacing baked in.
+   nest_theme — syn_theme.bundle.css (v0.3.0)
+   Five palettes, each with light + dark variants:
+     soft-pro     slate-blue / sage / warm taupe
+     crisp        cyan / emerald / accountant white
+     warm-earth   terracotta / cream / forest
+     corp-navy    deep navy / steel / gold
+     minimal      mono + single emerald accent
+   Layout / spacing rules are palette-agnostic
+   (body[class*="syn-palette-"]) so any switch keeps the tightening.
    ============================================================== */
 
 
-/* --- palette tokens: Soft Pro (light) ------------------------- */
+/* ====================================================================
+   1. PALETTE TOKENS — Soft Professional
+   ==================================================================== */
+
 body.syn-palette-soft-pro {
   --bg-color:           #f5f6f8;
   --fg-color:           #ffffff;
@@ -16,31 +25,19 @@ body.syn-palette-soft-pro {
   --text-color:         #1f2937;
   --text-muted:         #5b6471;
   --text-light:         #9aa3b3;
-
-  --primary-color:      #6b85a3;   /* slate blue */
+  --primary-color:      #6b85a3;
   --primary-hover:      #4a6580;
   --btn-primary-bg:     #6b85a3;
   --btn-primary-color:  #ffffff;
   --primary:            #6b85a3;
-
-  --accent-color:       #82a085;   /* sage green */
-  --warning-color:      #c4a373;   /* soft amber */
-  --error-color:        #b07e7e;   /* dusty rose */
-
+  --accent-color:       #82a085;
+  --warning-color:      #c4a373;
+  --error-color:        #b07e7e;
   --shadow-sm:          0 1px 2px rgba(15, 23, 42, 0.04);
   --shadow-md:          0 2px 8px rgba(15, 23, 42, 0.08);
   --shadow-lg:          0 4px 12px rgba(15, 23, 42, 0.10);
 }
-
-body.syn-palette-soft-pro:not([data-theme="dark"]) {
-  background: var(--bg-color);
-  color: var(--text-color);
-}
-
-
-/* --- palette tokens: Soft Pro (dark) -------------------------- */
-html[data-theme="dark"] body.syn-palette-soft-pro,
-body.syn-palette-soft-pro[data-theme="dark"] {
+html[data-theme="dark"] body.syn-palette-soft-pro {
   --bg-color:           #1a1f2e;
   --fg-color:           #232a3d;
   --card-bg:            #2a3142;
@@ -50,36 +47,240 @@ body.syn-palette-soft-pro[data-theme="dark"] {
   --text-color:         #e5e7eb;
   --text-muted:         #9aa3b3;
   --text-light:         #6b7488;
-
   --primary-color:      #8ba5c2;
   --primary-hover:      #a5bdd6;
   --btn-primary-bg:     #8ba5c2;
   --btn-primary-color:  #1a1f2e;
   --primary:            #8ba5c2;
-
   --accent-color:       #9bbf9e;
   --warning-color:      #d4b988;
   --error-color:        #c89898;
-
   --shadow-sm:          0 1px 2px rgba(0, 0, 0, 0.30);
   --shadow-md:          0 2px 8px rgba(0, 0, 0, 0.45);
   --shadow-lg:          0 4px 12px rgba(0, 0, 0, 0.55);
+}
 
+
+/* ====================================================================
+   2. PALETTE TOKENS — Accounting Crisp
+   ==================================================================== */
+
+body.syn-palette-crisp {
+  --bg-color:           #f6f8fa;
+  --fg-color:           #ffffff;
+  --card-bg:            #ffffff;
+  --card-border:        #e3e8ee;
+  --border-color:       #e3e8ee;
+  --subtle-fg:          #eef2f6;
+  --text-color:         #1f2937;
+  --text-muted:         #5b6471;
+  --text-light:         #98a2b3;
+  --primary-color:      #0891b2;
+  --primary-hover:      #0e7490;
+  --btn-primary-bg:     #0891b2;
+  --btn-primary-color:  #ffffff;
+  --primary:            #0891b2;
+  --accent-color:       #059669;
+  --warning-color:      #d97706;
+  --error-color:        #dc2626;
+  --shadow-sm:          0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-md:          0 2px 8px rgba(15, 23, 42, 0.08);
+  --shadow-lg:          0 4px 12px rgba(15, 23, 42, 0.10);
+}
+html[data-theme="dark"] body.syn-palette-crisp {
+  --bg-color:           #0f172a;
+  --fg-color:           #1e293b;
+  --card-bg:            #1e293b;
+  --card-border:        #334155;
+  --border-color:       #334155;
+  --subtle-fg:          #1e293b;
+  --text-color:         #e2e8f0;
+  --text-muted:         #94a3b8;
+  --text-light:         #64748b;
+  --primary-color:      #22d3ee;
+  --primary-hover:      #67e8f9;
+  --btn-primary-bg:     #22d3ee;
+  --btn-primary-color:  #0f172a;
+  --primary:            #22d3ee;
+  --accent-color:       #34d399;
+  --warning-color:      #f59e0b;
+  --error-color:        #f87171;
+  --shadow-sm:          0 1px 2px rgba(0, 0, 0, 0.30);
+  --shadow-md:          0 2px 8px rgba(0, 0, 0, 0.45);
+  --shadow-lg:          0 4px 12px rgba(0, 0, 0, 0.55);
+}
+
+
+/* ====================================================================
+   3. PALETTE TOKENS — Warm Earth
+   ==================================================================== */
+
+body.syn-palette-warm-earth {
+  --bg-color:           #faf6f1;
+  --fg-color:           #ffffff;
+  --card-bg:            #fdfaf5;
+  --card-border:        #e8dfd1;
+  --border-color:       #e8dfd1;
+  --subtle-fg:          #f3ece1;
+  --text-color:         #2d2418;
+  --text-muted:         #6b5d4f;
+  --text-light:         #9c8e7e;
+  --primary-color:      #a05a2c;
+  --primary-hover:      #7c4520;
+  --btn-primary-bg:     #a05a2c;
+  --btn-primary-color:  #ffffff;
+  --primary:            #a05a2c;
+  --accent-color:       #4a6741;
+  --warning-color:      #c4922c;
+  --error-color:        #a04848;
+  --shadow-sm:          0 1px 2px rgba(45, 36, 24, 0.05);
+  --shadow-md:          0 2px 8px rgba(45, 36, 24, 0.10);
+  --shadow-lg:          0 4px 12px rgba(45, 36, 24, 0.12);
+}
+html[data-theme="dark"] body.syn-palette-warm-earth {
+  --bg-color:           #1a1612;
+  --fg-color:           #2a2520;
+  --card-bg:            #2a2520;
+  --card-border:        #3d3328;
+  --border-color:       #3d3328;
+  --subtle-fg:          #221d18;
+  --text-color:         #ede4d3;
+  --text-muted:         #a89a85;
+  --text-light:         #7a6e5c;
+  --primary-color:      #c87a4c;
+  --primary-hover:      #e5946c;
+  --btn-primary-bg:     #c87a4c;
+  --btn-primary-color:  #1a1612;
+  --primary:            #c87a4c;
+  --accent-color:       #8baa7d;
+  --warning-color:      #d4a85a;
+  --error-color:        #c87878;
+  --shadow-sm:          0 1px 2px rgba(0, 0, 0, 0.40);
+  --shadow-md:          0 2px 8px rgba(0, 0, 0, 0.50);
+  --shadow-lg:          0 4px 12px rgba(0, 0, 0, 0.60);
+}
+
+
+/* ====================================================================
+   4. PALETTE TOKENS — Corporate Navy
+   ==================================================================== */
+
+body.syn-palette-corp-navy {
+  --bg-color:           #f5f7fa;
+  --fg-color:           #ffffff;
+  --card-bg:            #ffffff;
+  --card-border:        #d4dae5;
+  --border-color:       #d4dae5;
+  --subtle-fg:          #eaeef5;
+  --text-color:         #1a2332;
+  --text-muted:         #4f5d75;
+  --text-light:         #7e8a9e;
+  --primary-color:      #1e3a5f;
+  --primary-hover:      #14264a;
+  --btn-primary-bg:     #1e3a5f;
+  --btn-primary-color:  #ffffff;
+  --primary:            #1e3a5f;
+  --accent-color:       #b8945a;
+  --warning-color:      #c08428;
+  --error-color:        #a83a3a;
+  --shadow-sm:          0 1px 2px rgba(26, 35, 50, 0.06);
+  --shadow-md:          0 2px 8px rgba(26, 35, 50, 0.10);
+  --shadow-lg:          0 4px 12px rgba(26, 35, 50, 0.14);
+}
+html[data-theme="dark"] body.syn-palette-corp-navy {
+  --bg-color:           #0d1929;
+  --fg-color:           #1a2842;
+  --card-bg:            #1a2842;
+  --card-border:        #2c3e5e;
+  --border-color:       #2c3e5e;
+  --subtle-fg:          #14213a;
+  --text-color:         #e0e6f0;
+  --text-muted:         #9aa5b8;
+  --text-light:         #6c7689;
+  --primary-color:      #4a7ab8;
+  --primary-hover:      #6695d4;
+  --btn-primary-bg:     #4a7ab8;
+  --btn-primary-color:  #0d1929;
+  --primary:            #4a7ab8;
+  --accent-color:       #d4b27a;
+  --warning-color:      #d4a25a;
+  --error-color:        #c47878;
+  --shadow-sm:          0 1px 2px rgba(0, 0, 0, 0.40);
+  --shadow-md:          0 2px 8px rgba(0, 0, 0, 0.55);
+  --shadow-lg:          0 4px 12px rgba(0, 0, 0, 0.65);
+}
+
+
+/* ====================================================================
+   5. PALETTE TOKENS — Minimal Mono
+   ==================================================================== */
+
+body.syn-palette-minimal {
+  --bg-color:           #fafafa;
+  --fg-color:           #ffffff;
+  --card-bg:            #ffffff;
+  --card-border:        #e5e5e5;
+  --border-color:       #e5e5e5;
+  --subtle-fg:          #f3f3f3;
+  --text-color:         #171717;
+  --text-muted:         #525252;
+  --text-light:         #a3a3a3;
+  --primary-color:      #404040;
+  --primary-hover:      #171717;
+  --btn-primary-bg:     #171717;
+  --btn-primary-color:  #ffffff;
+  --primary:            #404040;
+  --accent-color:       #16a34a;
+  --warning-color:      #ca8a04;
+  --error-color:        #dc2626;
+  --shadow-sm:          0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md:          0 2px 8px rgba(0, 0, 0, 0.07);
+  --shadow-lg:          0 4px 12px rgba(0, 0, 0, 0.10);
+}
+html[data-theme="dark"] body.syn-palette-minimal {
+  --bg-color:           #0a0a0a;
+  --fg-color:           #1a1a1a;
+  --card-bg:            #1a1a1a;
+  --card-border:        #2a2a2a;
+  --border-color:       #2a2a2a;
+  --subtle-fg:          #141414;
+  --text-color:         #fafafa;
+  --text-muted:         #a3a3a3;
+  --text-light:         #737373;
+  --primary-color:      #d4d4d4;
+  --primary-hover:      #fafafa;
+  --btn-primary-bg:     #fafafa;
+  --btn-primary-color:  #0a0a0a;
+  --primary:            #d4d4d4;
+  --accent-color:       #4ade80;
+  --warning-color:      #facc15;
+  --error-color:        #f87171;
+  --shadow-sm:          0 1px 2px rgba(0, 0, 0, 0.45);
+  --shadow-md:          0 2px 8px rgba(0, 0, 0, 0.60);
+  --shadow-lg:          0 4px 12px rgba(0, 0, 0, 0.70);
+}
+
+
+/* ====================================================================
+   APPLIED SURFACES — palette-agnostic, uses tokens from active palette
+   ==================================================================== */
+
+body[class*="syn-palette-"] {
   background-color: var(--bg-color);
   color: var(--text-color);
 }
 
 
-/* ==============================================================
-   AGGRESSIVE FORM SPACING TIGHTENING
-   v0.2 main fix — section headers were wasting too much vertical
-   space. !important liberally applied to defeat ERPNext bundle
-   specificity wars.
-   ============================================================== */
+/* ====================================================================
+   AGGRESSIVE FORM SPACING TIGHTENING — palette-agnostic
+   v0.2 main fix carried into v0.3 — section headers were wasting too
+   much vertical space. !important throughout to defeat ERPNext bundle
+   specificity.
+   ==================================================================== */
 
 
 /* Section card (the white panel surrounding fields) */
-body.syn-palette-soft-pro .form-section {
+body[class*="syn-palette-"] .form-section {
   padding: 6px 14px !important;
   margin: 4px 0 !important;
   border-radius: 8px;
@@ -88,12 +289,11 @@ body.syn-palette-soft-pro .form-section {
   box-shadow: var(--shadow-sm);
 }
 
-/* Section heading bar — the line with label + chevron.
-   Was ~20-30px vertical padding in v16 default; tightened hard. */
-body.syn-palette-soft-pro .form-section .section-head,
-body.syn-palette-soft-pro .section-head,
-body.syn-palette-soft-pro .form-section [class*="section-head"],
-body.syn-palette-soft-pro .form-section > .head-label {
+/* Section heading bar — the line with label + chevron */
+body[class*="syn-palette-"] .form-section .section-head,
+body[class*="syn-palette-"] .section-head,
+body[class*="syn-palette-"] .form-section [class*="section-head"],
+body[class*="syn-palette-"] .form-section > .head-label {
   padding-top:    4px !important;
   padding-bottom: 4px !important;
   margin: 0 !important;
@@ -106,31 +306,30 @@ body.syn-palette-soft-pro .form-section > .head-label {
   line-height: 1.3 !important;
 }
 
-body.syn-palette-soft-pro .form-section .section-head:empty {
+body[class*="syn-palette-"] .form-section .section-head:empty {
   display: none !important;
 }
 
-/* Collapsible-section trigger row (e.g. Accounting Dimensions, Currency and Price List).
-   These are the tallest offenders in v16. */
-body.syn-palette-soft-pro .form-section.collapsible-section .section-head,
-body.syn-palette-soft-pro .collapsible-section .section-head,
-body.syn-palette-soft-pro [class*="collapsible"] .section-head,
-body.syn-palette-soft-pro .section-collapsible-trigger,
-body.syn-palette-soft-pro .form-section.collapsed .section-head {
+/* Collapsible section trigger row */
+body[class*="syn-palette-"] .form-section.collapsible-section .section-head,
+body[class*="syn-palette-"] .collapsible-section .section-head,
+body[class*="syn-palette-"] [class*="collapsible"] .section-head,
+body[class*="syn-palette-"] .section-collapsible-trigger,
+body[class*="syn-palette-"] .form-section.collapsed .section-head {
   padding-top:    6px !important;
   padding-bottom: 6px !important;
   min-height: 26px !important;
   cursor: pointer;
 }
 
-/* Section body (the columns area inside) */
-body.syn-palette-soft-pro .form-section .section-body {
+/* Section body */
+body[class*="syn-palette-"] .form-section .section-body {
   padding-top:    4px !important;
   padding-bottom: 4px !important;
 }
 
 /* Form column wrapper */
-body.syn-palette-soft-pro .form-column {
+body[class*="syn-palette-"] .form-column {
   padding-left: 8px !important;
   padding-right: 8px !important;
 }
@@ -138,12 +337,12 @@ body.syn-palette-soft-pro .form-column {
 
 /* --- Field-level tightening ----------------------------------- */
 
-body.syn-palette-soft-pro .frappe-control {
+body[class*="syn-palette-"] .frappe-control {
   margin-bottom: 6px !important;
 }
 
-body.syn-palette-soft-pro .control-label,
-body.syn-palette-soft-pro .frappe-control .control-label {
+body[class*="syn-palette-"] .control-label,
+body[class*="syn-palette-"] .frappe-control .control-label {
   margin-bottom: 2px !important;
   padding: 0 !important;
   font-size: 11px !important;
@@ -152,88 +351,86 @@ body.syn-palette-soft-pro .frappe-control .control-label {
   line-height: 1.3 !important;
 }
 
-body.syn-palette-soft-pro .form-control,
-body.syn-palette-soft-pro input.form-control,
-body.syn-palette-soft-pro select.form-control,
-body.syn-palette-soft-pro .input-with-feedback {
+body[class*="syn-palette-"] .form-control,
+body[class*="syn-palette-"] input.form-control,
+body[class*="syn-palette-"] select.form-control,
+body[class*="syn-palette-"] .input-with-feedback {
   min-height: 30px !important;
   height: 30px !important;
   padding: 4px 10px !important;
   font-size: 13px;
 }
 
-body.syn-palette-soft-pro textarea.form-control {
+body[class*="syn-palette-"] textarea.form-control {
   min-height: 60px !important;
   height: auto !important;
   padding: 6px 10px !important;
 }
 
-/* Field with feedback (icons appended) */
-body.syn-palette-soft-pro .input-with-feedback.like-disabled-input {
+body[class*="syn-palette-"] .input-with-feedback.like-disabled-input {
   min-height: 30px !important;
   padding: 4px 10px !important;
 }
 
 
-/* --- List + grid rows (also too tall by default) -------------- */
+/* --- List + grid rows ----------------------------------------- */
 
-body.syn-palette-soft-pro .list-row,
-body.syn-palette-soft-pro .grid-row,
-body.syn-palette-soft-pro .grid-body .grid-row {
+body[class*="syn-palette-"] .list-row,
+body[class*="syn-palette-"] .grid-row,
+body[class*="syn-palette-"] .grid-body .grid-row {
   min-height: 32px !important;
   padding-top: 4px !important;
   padding-bottom: 4px !important;
 }
 
-body.syn-palette-soft-pro .list-row-container {
+body[class*="syn-palette-"] .list-row-container {
   padding: 4px 0 !important;
 }
 
 
 /* --- Page head + form layout shell ---------------------------- */
 
-body.syn-palette-soft-pro .page-head {
+body[class*="syn-palette-"] .page-head {
   padding: 6px 16px !important;
   background: var(--fg-color);
   border-bottom: 1px solid var(--card-border);
 }
 
-body.syn-palette-soft-pro .page-title {
+body[class*="syn-palette-"] .page-title {
   margin-bottom: 0 !important;
   padding: 0 !important;
 }
 
-body.syn-palette-soft-pro .form-layout {
+body[class*="syn-palette-"] .form-layout {
   padding-top: 6px !important;
   padding-bottom: 6px !important;
 }
 
-/* Gap between successive sections / blocks */
-body.syn-palette-soft-pro .form-layout > * + * {
+body[class*="syn-palette-"] .form-layout > * + * {
   margin-top: 4px !important;
 }
 
 
-/* --- Tabs (Details / Address & Contact / Terms / More Info / Connections) */
+/* --- Tabs ----------------------------------------------------- */
 
-body.syn-palette-soft-pro .form-tabs-list,
-body.syn-palette-soft-pro .nav-tabs {
+body[class*="syn-palette-"] .form-tabs-list,
+body[class*="syn-palette-"] .nav-tabs {
   border-bottom: 1px solid var(--card-border);
   margin-bottom: 6px !important;
   padding: 0 12px !important;
 }
 
-body.syn-palette-soft-pro .form-tabs-list .nav-link,
-body.syn-palette-soft-pro .nav-tabs .nav-link,
-body.syn-palette-soft-pro .form-tabs .nav-link {
+body[class*="syn-palette-"] .form-tabs-list .nav-link,
+body[class*="syn-palette-"] .nav-tabs .nav-link,
+body[class*="syn-palette-"] .form-tabs .nav-link {
   padding: 8px 14px !important;
   font-size: 13px !important;
   color: var(--text-muted);
   border: none !important;
 }
 
-body.syn-palette-soft-pro .form-tabs-list .nav-link.active,
-body.syn-palette-soft-pro .nav-tabs .nav-link.active {
+body[class*="syn-palette-"] .form-tabs-list .nav-link.active,
+body[class*="syn-palette-"] .nav-tabs .nav-link.active {
   color: var(--text-color);
   border-bottom: 2px solid var(--primary-color) !important;
 }
@@ -241,51 +438,51 @@ body.syn-palette-soft-pro .nav-tabs .nav-link.active {
 
 /* --- Sidebar / app menu --------------------------------------- */
 
-body.syn-palette-soft-pro .layout-side-section,
-body.syn-palette-soft-pro .sidebar {
+body[class*="syn-palette-"] .layout-side-section,
+body[class*="syn-palette-"] .sidebar {
   background: var(--fg-color);
   border-right: 1px solid var(--card-border);
 }
 
-body.syn-palette-soft-pro .layout-side-section .sidebar-item-container {
+body[class*="syn-palette-"] .layout-side-section .sidebar-item-container {
   padding: 4px 8px !important;
 }
 
 
 /* --- Buttons -------------------------------------------------- */
 
-body.syn-palette-soft-pro .btn {
+body[class*="syn-palette-"] .btn {
   font-weight: 500;
   border-radius: 6px;
 }
 
-body.syn-palette-soft-pro .btn-primary {
+body[class*="syn-palette-"] .btn-primary {
   background-color: var(--btn-primary-bg);
   border-color: var(--btn-primary-bg);
   color: var(--btn-primary-color);
 }
-body.syn-palette-soft-pro .btn-primary:hover {
+body[class*="syn-palette-"] .btn-primary:hover {
   background-color: var(--primary-hover);
   border-color: var(--primary-hover);
 }
 
-body.syn-palette-soft-pro .btn-default,
-body.syn-palette-soft-pro .btn-secondary {
+body[class*="syn-palette-"] .btn-default,
+body[class*="syn-palette-"] .btn-secondary {
   background-color: var(--card-bg);
   border-color: var(--card-border);
   color: var(--text-color);
 }
 
 
-/* --- Navbar logo styling (matches the rounded SVG) ----------- */
+/* --- Navbar logo styling -------------------------------------- */
 
-body.syn-palette-soft-pro header.desktop-navbar .navbar-home {
+body[class*="syn-palette-"] header.desktop-navbar .navbar-home {
   padding: 0 !important;
   border-radius: 7px;
   overflow: hidden;
 }
 
-body.syn-palette-soft-pro header.desktop-navbar .navbar-home img {
+body[class*="syn-palette-"] header.desktop-navbar .navbar-home img {
   display: block;
   width: 32px;
   height: 32px;
@@ -293,19 +490,20 @@ body.syn-palette-soft-pro header.desktop-navbar .navbar-home img {
 }
 
 
-/* --- Submit / status badges ---------------------------------- */
+/* --- Indicator pills ------------------------------------------ */
 
-body.syn-palette-soft-pro .indicator-pill {
+body[class*="syn-palette-"] .indicator-pill {
   font-weight: 500;
   border-radius: 4px;
   padding: 2px 8px !important;
 }
 
 
-/* --- Dark-mode panel overrides ------------------------------- */
-html[data-theme="dark"] body.syn-palette-soft-pro .form-section,
-html[data-theme="dark"] body.syn-palette-soft-pro .layout-side-section,
-html[data-theme="dark"] body.syn-palette-soft-pro .page-head {
+/* --- Dark-mode panel overrides -------------------------------- */
+
+html[data-theme="dark"] body[class*="syn-palette-"] .form-section,
+html[data-theme="dark"] body[class*="syn-palette-"] .layout-side-section,
+html[data-theme="dark"] body[class*="syn-palette-"] .page-head {
   background: var(--card-bg);
   border-color: var(--card-border);
 }

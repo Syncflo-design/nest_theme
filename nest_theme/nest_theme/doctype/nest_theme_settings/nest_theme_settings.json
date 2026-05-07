@@ -5,6 +5,7 @@
  "engine": "InnoDB",
  "field_order": [
   "branding_section",
+  "palette",
   "customer_logo"
  ],
  "fields": [
@@ -12,6 +13,15 @@
    "fieldname": "branding_section",
    "fieldtype": "Section Break",
    "label": "Branding"
+  },
+  {
+   "default": "Soft Professional",
+   "description": "Site-wide colour theme. All users see the chosen palette. Switches live without page reload via realtime push.",
+   "fieldname": "palette",
+   "fieldtype": "Select",
+   "label": "Palette",
+   "options": "Soft Professional\nAccounting Crisp\nWarm Earth\nCorporate Navy\nMinimal Mono",
+   "reqd": 1
   },
   {
    "description": "Optional. Replaces the default Nest logo in the navbar. Recommended: square 32×32 SVG or PNG.",
@@ -22,7 +32,7 @@
  ],
  "issingle": 1,
  "links": [],
- "modified": "2026-05-07 18:00:00",
+ "modified": "2026-05-07 19:00:00",
  "modified_by": "Administrator",
  "module": "Nest Theme",
  "name": "Nest Theme Settings",
