@@ -1,4 +1,4 @@
-/* nest_theme — syn_boot.bundle.js (v0.1.1)
+/* nest_theme — syn_boot.bundle.js (v0.1.2)
  *
  * 1. Apply body classes from frappe.boot.syn_classes ASAP (before paint).
  * 2. Build navbar toolbar widgets: density segment + font scaler.
@@ -7,13 +7,16 @@
  *    - Legacy fallback: .navbar .navbar-nav, filtered to skip the hidden
  *      notification-item-tabs ul (which is what tripped v0.1).
  *    - MutationObserver re-builds if Frappe re-renders the navbar.
- *    - Frappe SPA router hook also re-builds on route change.
- * 3. Listen for syn_palette_changed realtime events and live-swap palette.
- * 4. Keyboard shortcuts: Ctrl+= / Ctrl+- (font), Ctrl+Shift+D (density cycle).
+ *    - frappe.router.on('change') hook re-builds on SPA route changes.
+ * 3. Document-level CAPTURE-phase click + contextmenu delegation. Frappe v16
+ *    has handlers in the navbar that swallow real mouse clicks before they
+ *    reach our buttons (programmatic .click() bypasses them — that's how we
+ *    spotted it). We listen on document with {capture: true} to run before
+ *    those handlers, stopPropagation to keep Frappe's bubble handlers out.
+ * 4. Listen for syn_palette_changed realtime events and live-swap palette.
+ * 5. Keyboard shortcuts: Ctrl+= / Ctrl+- (font), Ctrl+Shift+D (density cycle).
  *
- * v0.1.1 fix: v0.1's '.navbar .navbar-nav' selector matched the hidden
- * notification-item-tabs <ul> in the v16 modern desk shell, so widgets were
- * appended off-screen and got wiped on re-render.
+ * v0.1.2: capture-phase delegation. v0.1.1: v16 anchor + observer.
  */
 
 (function () {
@@ -22,7 +25,7 @@
   const FONT_STEPS = ['xs', 'sm', 'md', 'lg', 'xl'];
   const FONT_PCTS  = { xs: 85, sm: 92, md: 100, lg: 115, xl: 130 };
   const DENSITIES  = ['compact', 'cozy', 'comfortable'];
-  const DENSITY_LABEL = { compact: '▬', cozy: '▬▬', comfortable: '▬▬▬' };
+  const DENSITY_LABEL = { compact: '─', cozy: '──', comfortable: '───' };
 
   // -------- 1. Apply boot classes --------------------------------------
   function applyBootClasses() {
@@ -39,7 +42,7 @@
   document.addEventListener('DOMContentLoaded', applyBootClasses);
 
 
-  // -------- 2. Toolbar widgets -----------------------------------------
+  // -------- 2. State helpers + setters --------------------------------
   function currentDensity() {
     const cls = Array.from(document.body.classList).find((c) => c.startsWith('syn-density-'));
     return cls ? cls.replace('syn-density-', '') : 'comfortable';
@@ -93,6 +96,54 @@
     }, 350);
   }
 
+
+  // -------- 3. Document-level event delegation (CAPTURE phase) --------
+  // Runs before Frappe's bubble-phase navbar click handlers. Survives any
+  // number of widget rebuilds since the listener is on document, not buttons.
+
+  document.addEventListener('click', function (e) {
+    const t = e.target;
+    if (!t || !t.closest) return;
+    if (!t.closest('.syn-toolbar-widgets')) return;
+
+    const dBtn = t.closest('.syn-density-segment button');
+    if (dBtn) {
+      e.stopPropagation();
+      e.preventDefault();
+      setDensity(dBtn.dataset.density);
+      return;
+    }
+
+    const fBtn = t.closest('.syn-font-scaler button');
+    if (fBtn) {
+      e.stopPropagation();
+      e.preventDefault();
+      // Minus button has the textContent '−' (U+2212), plus has '+'.
+      bumpFont(fBtn.textContent === '−' ? -1 : 1);
+      return;
+    }
+  }, { capture: true });
+
+  document.addEventListener('contextmenu', function (e) {
+    if (!e.target || !e.target.closest) return;
+    if (!e.target.closest('.syn-font-scaler')) return;
+    e.stopPropagation();
+    e.preventDefault();
+    const def = (window.frappe && frappe.boot && frappe.boot.syn_settings &&
+                 frappe.boot.syn_settings.default_font_scale) || 'md';
+    setFont(def);
+  }, { capture: true });
+
+  // Also block mousedown propagation so Frappe doesn't get a chance to
+  // swallow the subsequent click before it reaches us.
+  document.addEventListener('mousedown', function (e) {
+    if (e.target && e.target.closest && e.target.closest('.syn-toolbar-widgets button')) {
+      e.stopPropagation();
+    }
+  }, { capture: true });
+
+
+  // -------- 4. Build / re-build the widget ---------------------------
   // Find where to insert. Modern v16 desk first, legacy navbar second.
   function findAnchor() {
     const bell = document.querySelector('header.desktop-navbar .desktop-notifications');
@@ -137,7 +188,7 @@
         btn.title = d.charAt(0).toUpperCase() + d.slice(1);
         btn.textContent = DENSITY_LABEL[d];
         if (currentDensity() === d) btn.classList.add('active');
-        btn.addEventListener('click', () => setDensity(d));
+        // No per-button click handler — document-level delegation handles it.
         seg.appendChild(btn);
       });
       wrap.appendChild(seg);
@@ -150,9 +201,8 @@
 
       const minus = document.createElement('button');
       minus.type = 'button';
-      minus.textContent = '−';
+      minus.textContent = '−';   // U+2212, must match the click delegate
       minus.title = 'Smaller font (Ctrl+-)';
-      minus.addEventListener('click', () => bumpFont(-1));
 
       const pct = document.createElement('span');
       pct.className = 'syn-font-pct';
@@ -162,16 +212,10 @@
       plus.type = 'button';
       plus.textContent = '+';
       plus.title = 'Larger font (Ctrl+=)';
-      plus.addEventListener('click', () => bumpFont(1));
 
       scaler.appendChild(minus);
       scaler.appendChild(pct);
       scaler.appendChild(plus);
-      scaler.addEventListener('contextmenu', (e) => {
-        e.preventDefault();
-        const def = (frappe.boot.syn_settings && frappe.boot.syn_settings.default_font_scale) || 'md';
-        setFont(def);
-      });
       wrap.appendChild(scaler);
     }
 
@@ -211,7 +255,6 @@
   document.addEventListener('DOMContentLoaded', () => waitForNavbar());
   if (document.readyState !== 'loading') waitForNavbar();
 
-  // SPA route changes don't fire DOMContentLoaded; rebuild on Frappe nav.
   function attachRouter() {
     if (!window.frappe || !frappe.router || !frappe.router.on) {
       setTimeout(attachRouter, 500);
@@ -225,7 +268,7 @@
   attachRouter();
 
 
-  // -------- 3. Realtime palette change ---------------------------------
+  // -------- 5. Realtime palette change -------------------------------
   function attachRealtime() {
     if (!window.frappe || !frappe.realtime || !frappe.realtime.on) {
       setTimeout(attachRealtime, 500);
@@ -242,7 +285,7 @@
   attachRealtime();
 
 
-  // -------- 4. Keyboard shortcuts --------------------------------------
+  // -------- 6. Keyboard shortcuts -------------------------------------
   document.addEventListener('keydown', function (e) {
     const t = e.target;
     if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
