@@ -507,3 +507,167 @@ html[data-theme="dark"] body[class*="syn-palette-"] .page-head {
   background: var(--card-bg);
   border-color: var(--card-border);
 }
+
+
+/* ====================================================================
+   WORKSPACE / DESK LANDING — palette-agnostic
+   Professional styling for sidebar nav, shortcut tiles, number cards,
+   link card groups, and workspace section headers.
+   ==================================================================== */
+
+/* --- Left sidebar nav -------------------------------------------- */
+
+body[class*="syn-palette-"] .desk-sidebar {
+  background: var(--fg-color);
+  border-right: 1px solid var(--card-border);
+}
+
+body[class*="syn-palette-"] .standard-sidebar-item > a,
+body[class*="syn-palette-"] .standard-sidebar-item > span {
+  border-radius: 6px;
+  padding: 6px 10px !important;
+  transition: background 0.15s ease, color 0.15s ease;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+body[class*="syn-palette-"] .standard-sidebar-item:hover > a,
+body[class*="syn-palette-"] .standard-sidebar-item:hover > span {
+  background: var(--subtle-fg) !important;
+  color: var(--text-color) !important;
+}
+
+body[class*="syn-palette-"] .standard-sidebar-item.selected > a,
+body[class*="syn-palette-"] .standard-sidebar-item.selected > span {
+  background: var(--subtle-fg) !important;
+  color: var(--primary-color) !important;
+  font-weight: 600 !important;
+  border-left: 3px solid var(--primary-color);
+  padding-left: 8px !important;
+}
+
+
+/* --- Shortcut tiles (the icon cards on the workspace page) -------- */
+
+body[class*="syn-palette-"] .shortcut-widget-box {
+  background: var(--card-bg) !important;
+  border: 1px solid var(--card-border) !important;
+  border-radius: 10px !important;
+  box-shadow: var(--shadow-sm) !important;
+  transition: box-shadow 0.2s ease, transform 0.18s ease !important;
+}
+
+body[class*="syn-palette-"] .shortcut-widget-box:hover {
+  box-shadow: var(--shadow-md) !important;
+  transform: translateY(-2px);
+}
+
+body[class*="syn-palette-"] .shortcut-widget-box .widget-title {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: var(--text-color) !important;
+}
+
+body[class*="syn-palette-"] .shortcut-widget-box .widget-subtitle {
+  font-size: 11px !important;
+  color: var(--text-muted) !important;
+}
+
+body[class*="syn-palette-"] .shortcut-widget-box .widget-icon {
+  background: var(--subtle-fg) !important;
+  border-radius: 8px !important;
+  color: var(--primary-color) !important;
+}
+
+
+/* --- Number cards ------------------------------------------------- */
+
+body[class*="syn-palette-"] .number-card-wrapper,
+body[class*="syn-palette-"] .widget.number-card-widget {
+  background: var(--card-bg) !important;
+  border: 1px solid var(--card-border) !important;
+  border-radius: 10px !important;
+  box-shadow: var(--shadow-sm) !important;
+  transition: box-shadow 0.2s ease !important;
+}
+
+body[class*="syn-palette-"] .number-card-wrapper:hover,
+body[class*="syn-palette-"] .widget.number-card-widget:hover {
+  box-shadow: var(--shadow-md) !important;
+}
+
+body[class*="syn-palette-"] .number-card-container .number-card-value {
+  font-size: 28px !important;
+  font-weight: 700 !important;
+  color: var(--primary-color) !important;
+}
+
+body[class*="syn-palette-"] .number-card-container .number-card-label,
+body[class*="syn-palette-"] .number-card-container .number-card-title {
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  color: var(--text-muted) !important;
+}
+
+
+/* --- Link card groups (Reports & Masters sections) ---------------- */
+
+body[class*="syn-palette-"] .links-widget-container,
+body[class*="syn-palette-"] .widget.links-widget {
+  background: var(--card-bg) !important;
+  border: 1px solid var(--card-border) !important;
+  border-radius: 10px !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+body[class*="syn-palette-"] .links-widget-list .link-item {
+  padding: 5px 10px !important;
+  border-radius: 5px;
+  transition: background 0.12s ease;
+}
+
+body[class*="syn-palette-"] .links-widget-list .link-item:hover {
+  background: var(--subtle-fg) !important;
+}
+
+body[class*="syn-palette-"] .links-widget-list .link-item a {
+  font-size: 13px !important;
+  color: var(--text-color) !important;
+}
+
+
+/* --- Workspace section headers ----------------------------------- */
+
+body[class*="syn-palette-"] .widget.header-widget .widget-head,
+body[class*="syn-palette-"] .widget.header-widget .widget-head h4,
+body[class*="syn-palette-"] .widget.header-widget .widget-head span {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  color: var(--text-muted) !important;
+  border-bottom: 1px solid var(--card-border) !important;
+  padding-bottom: 8px !important;
+  margin-bottom: 4px !important;
+}
+
+
+/* --- Workspace page layout --------------------------------------- */
+
+body[class*="syn-palette-"] .layout-main-section,
+body[class*="syn-palette-"] .desk-page {
+  background: var(--bg-color) !important;
+}
+
+
+/* --- Dark-mode workspace overrides ------------------------------- */
+
+html[data-theme="dark"] body[class*="syn-palette-"] .shortcut-widget-box,
+html[data-theme="dark"] body[class*="syn-palette-"] .number-card-wrapper,
+html[data-theme="dark"] body[class*="syn-palette-"] .links-widget-container,
+html[data-theme="dark"] body[class*="syn-palette-"] .widget.links-widget {
+  background: var(--card-bg) !important;
+  border-color: var(--card-border) !important;
+}
