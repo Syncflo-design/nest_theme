@@ -1,4 +1,4 @@
-/* nest_theme — syn_boot.bundle.js (v0.3.0)
+/* nest_theme — syn_boot.bundle.js (v0.3.3)
  *
  * Three jobs:
  * 1. Apply the palette body class from frappe.boot.syn_classes ASAP (no FOUC).
@@ -126,4 +126,46 @@
     sock.on('reconnect', registerRealtime);
   }
   attachRealtime();
+
+
+  // -------- 4. Desk label renames ------------------------------------
+  // Add entries here to rename any desk module icon label site-wide.
+  // Key = exact text Frappe renders; Value = replacement display text.
+  var SYN_DESK_RENAMES = {
+    'Tools': 'Tasks List'
+  };
+
+  function applyDeskRenames() {
+    var keys = Object.keys(SYN_DESK_RENAMES);
+    if (!keys.length) return;
+    var root = document.querySelector('[data-page-route="desk"]') ||
+               document.querySelector('.page-container[data-page="desktop"]') ||
+               document.body;
+    root.querySelectorAll('span, div, a, h4, p').forEach(function (el) {
+      if (!el.children.length) {
+        var t = el.textContent.trim();
+        if (SYN_DESK_RENAMES[t] !== undefined) {
+          el.textContent = SYN_DESK_RENAMES[t];
+        }
+      }
+    });
+  }
+
+  var _deskRenameTimer = null;
+  var _deskRenameObserver = new MutationObserver(function () {
+    clearTimeout(_deskRenameTimer);
+    _deskRenameTimer = setTimeout(applyDeskRenames, 80);
+  });
+
+  function startDeskRenameWatch() {
+    applyDeskRenames();
+    if (!document._synRenameObserving) {
+      _deskRenameObserver.observe(document.body, { childList: true, subtree: true });
+      document._synRenameObserving = true;
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', startDeskRenameWatch);
+  if (document.readyState !== 'loading') startDeskRenameWatch();
+
 })();
