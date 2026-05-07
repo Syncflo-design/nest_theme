@@ -1,0 +1,246 @@
+/* ==============================================================
+   nest_theme — syn_theme.bundle.css
+   Class axes (resolved at boot, applied to <body>):
+     syn-palette-<slug>     soft-pro | crisp | warm-earth | corp-navy | minimal
+     syn-density-<slug>     compact  | cozy  | comfortable
+     syn-font-<slug>        xs | sm | md | lg | xl
+   Frappe's existing dark/light toggle stays untouched; we listen
+   to data-theme="dark|light" on <html> and ship paired variants
+   for every palette.
+   v0.1 ships ONE palette: Soft Professional.
+   ============================================================== */
+
+
+/* --- font scale ------------------------------------------------ */
+/* Frappe sizes most things via rem, so bumping --base-font-size
+   on <html> scales the whole desk proportionally. We fall back to
+   explicit text-size overrides on common Frappe utility classes
+   for the few places where rem isn't honoured. */
+
+body.syn-font-xs { --syn-base-font-size: 12px; }
+body.syn-font-sm { --syn-base-font-size: 13px; }
+body.syn-font-md { --syn-base-font-size: 14px; }
+body.syn-font-lg { --syn-base-font-size: 16px; }
+body.syn-font-xl { --syn-base-font-size: 18px; }
+
+html:has(body.syn-font-xs),
+html:has(body.syn-font-sm),
+html:has(body.syn-font-md),
+html:has(body.syn-font-lg),
+html:has(body.syn-font-xl) {
+  font-size: var(--syn-base-font-size, 14px);
+}
+
+
+/* --- density --------------------------------------------------- */
+/* Tokens used by the rules below; palette CSS may also read these. */
+body.syn-density-compact     { --syn-pad-x: 8px;  --syn-pad-y: 4px;  --syn-row-h: 28px; --syn-input-h: 28px; --syn-section-pad: 8px 12px;  --syn-section-mar: 6px 0; }
+body.syn-density-cozy        { --syn-pad-x: 10px; --syn-pad-y: 6px;  --syn-row-h: 32px; --syn-input-h: 32px; --syn-section-pad: 10px 14px; --syn-section-mar: 8px 0; }
+body.syn-density-comfortable { --syn-pad-x: 12px; --syn-pad-y: 8px;  --syn-row-h: 40px; --syn-input-h: 40px; --syn-section-pad: 14px 18px; --syn-section-mar: 10px 0; }
+
+body[class*="syn-density-"] .frappe-control input.form-control,
+body[class*="syn-density-"] .frappe-control select.form-control,
+body[class*="syn-density-"] .frappe-control textarea.form-control {
+  height: var(--syn-input-h);
+  padding-top: var(--syn-pad-y);
+  padding-bottom: var(--syn-pad-y);
+}
+
+body[class*="syn-density-"] .form-section {
+  padding: var(--syn-section-pad) !important;
+  margin: var(--syn-section-mar) !important;
+}
+
+body.syn-density-compact .list-row,
+body.syn-density-compact .grid-row,
+body.syn-density-cozy    .list-row,
+body.syn-density-cozy    .grid-row {
+  min-height: var(--syn-row-h);
+}
+
+body.syn-density-compact .frappe-control { margin-bottom: 4px; }
+body.syn-density-cozy    .frappe-control { margin-bottom: 6px; }
+
+
+/* --- palette: Soft Professional (light) ----------------------- */
+body.syn-palette-soft-pro:not([data-theme="dark"]),
+html:not([data-theme="dark"]) body.syn-palette-soft-pro {
+  --bg-color:           #f5f6f8;
+  --fg-color:           #ffffff;
+  --card-bg:            #ffffff;
+  --card-border:        #e5e7eb;
+  --border-color:       #e5e7eb;
+  --subtle-fg:          #f0f2f5;
+  --text-color:         #1f2937;
+  --text-muted:         #5b6471;
+  --text-light:         #9aa3b3;
+
+  --primary-color:      #6b85a3;   /* slate blue */
+  --primary-hover:      #4a6580;
+  --btn-primary-bg:     #6b85a3;
+  --btn-primary-color:  #ffffff;
+  --primary:            #6b85a3;
+
+  --accent-color:       #82a085;   /* sage green */
+  --warning-color:      #c4a373;   /* soft amber */
+  --error-color:        #b07e7e;   /* dusty rose */
+
+  --shadow-sm:          0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-md:          0 2px 8px rgba(15, 23, 42, 0.08);
+  --shadow-lg:          0 4px 12px rgba(15, 23, 42, 0.10);
+
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+body.syn-palette-soft-pro:not([data-theme="dark"]) .navbar,
+body.syn-palette-soft-pro:not([data-theme="dark"]) .sidebar {
+  background: var(--fg-color);
+  border-color: var(--card-border);
+}
+
+body.syn-palette-soft-pro:not([data-theme="dark"]) .form-section,
+body.syn-palette-soft-pro:not([data-theme="dark"]) .layout-side-section,
+body.syn-palette-soft-pro:not([data-theme="dark"]) .widget {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+}
+
+body.syn-palette-soft-pro:not([data-theme="dark"]) .btn-primary {
+  background-color: var(--btn-primary-bg);
+  border-color: var(--btn-primary-bg);
+  color: var(--btn-primary-color);
+}
+body.syn-palette-soft-pro:not([data-theme="dark"]) .btn-primary:hover {
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
+
+/* --- palette: Soft Professional (dark) ------------------------ */
+body.syn-palette-soft-pro[data-theme="dark"],
+html[data-theme="dark"] body.syn-palette-soft-pro {
+  --bg-color:           #1a1f2e;
+  --fg-color:           #232a3d;
+  --card-bg:            #2a3142;
+  --card-border:        #3a4258;
+  --border-color:       #3a4258;
+  --subtle-fg:          #232a3d;
+  --text-color:         #e5e7eb;
+  --text-muted:         #9aa3b3;
+  --text-light:         #6b7488;
+
+  --primary-color:      #8ba5c2;
+  --primary-hover:      #a5bdd6;
+  --btn-primary-bg:     #8ba5c2;
+  --btn-primary-color:  #1a1f2e;
+  --primary:            #8ba5c2;
+
+  --accent-color:       #9bbf9e;
+  --warning-color:      #d4b988;
+  --error-color:        #c89898;
+
+  --shadow-sm:          0 1px 2px rgba(0, 0, 0, 0.30);
+  --shadow-md:          0 2px 8px rgba(0, 0, 0, 0.45);
+  --shadow-lg:          0 4px 12px rgba(0, 0, 0, 0.55);
+
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+body.syn-palette-soft-pro[data-theme="dark"] .navbar,
+body.syn-palette-soft-pro[data-theme="dark"] .sidebar,
+body.syn-palette-soft-pro[data-theme="dark"] .form-section,
+body.syn-palette-soft-pro[data-theme="dark"] .layout-side-section,
+body.syn-palette-soft-pro[data-theme="dark"] .widget {
+  background: var(--card-bg);
+  border-color: var(--card-border);
+}
+
+
+/* --- toolbar widgets ------------------------------------------ */
+.syn-toolbar-widgets {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: 12px;
+  padding-left: 10px;
+  border-left: 1px solid var(--card-border, #e5e7eb);
+}
+
+.syn-density-segment {
+  display: inline-flex;
+  border: 1px solid var(--card-border, #e5e7eb);
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--card-bg, #ffffff);
+}
+
+.syn-density-segment button {
+  appearance: none;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 4px 8px;
+  font-size: 11px;
+  color: var(--text-muted, #5b6471);
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 24px;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+.syn-density-segment button + button {
+  border-left: 1px solid var(--card-border, #e5e7eb);
+}
+.syn-density-segment button:hover {
+  background: var(--subtle-fg, #f0f2f5);
+  color: var(--text-color, #1f2937);
+}
+.syn-density-segment button.active {
+  background: var(--primary-color, #6b85a3);
+  color: var(--btn-primary-color, #ffffff);
+}
+
+.syn-font-scaler {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.syn-font-scaler button {
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--card-border, #e5e7eb);
+  border-radius: 4px;
+  background: var(--card-bg, #ffffff);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--text-color, #1f2937);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s ease;
+}
+.syn-font-scaler button:hover {
+  background: var(--subtle-fg, #f0f2f5);
+}
+.syn-font-pct {
+  font-size: 11px;
+  color: var(--text-muted, #5b6471);
+  min-width: 36px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+/* On narrow screens the navbar sometimes wraps — keep widgets together */
+@media (max-width: 768px) {
+  .syn-toolbar-widgets { margin-left: 6px; padding-left: 6px; gap: 6px; }
+  .syn-density-segment button { min-width: 24px; padding: 4px 6px; }
+}

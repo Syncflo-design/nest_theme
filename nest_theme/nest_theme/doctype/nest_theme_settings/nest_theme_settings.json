@@ -1,0 +1,85 @@
+{
+ "actions": [],
+ "creation": "2026-05-07 12:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "palette",
+  "section_break_defaults",
+  "default_density",
+  "default_font_scale",
+  "section_break_overrides",
+  "allow_user_density_override",
+  "allow_user_font_override"
+ ],
+ "fields": [
+  {
+   "default": "Soft Professional",
+   "fieldname": "palette",
+   "fieldtype": "Select",
+   "label": "Palette",
+   "options": "Soft Professional\nAccounting Crisp\nWarm Earth\nCorporate Navy\nMinimal Mono",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_defaults",
+   "fieldtype": "Section Break",
+   "label": "Defaults"
+  },
+  {
+   "default": "comfortable",
+   "fieldname": "default_density",
+   "fieldtype": "Select",
+   "label": "Default density",
+   "options": "compact\ncozy\ncomfortable"
+  },
+  {
+   "default": "md",
+   "fieldname": "default_font_scale",
+   "fieldtype": "Select",
+   "label": "Default font scale",
+   "options": "xs\nsm\nmd\nlg\nxl"
+  },
+  {
+   "fieldname": "section_break_overrides",
+   "fieldtype": "Section Break",
+   "label": "User overrides"
+  },
+  {
+   "default": "1",
+   "fieldname": "allow_user_density_override",
+   "fieldtype": "Check",
+   "label": "Allow user density override"
+  },
+  {
+   "default": "1",
+   "fieldname": "allow_user_font_override",
+   "fieldtype": "Check",
+   "label": "Allow user font override"
+  }
+ ],
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-05-07 12:00:00",
+ "modified_by": "Administrator",
+ "module": "Nest Theme",
+ "name": "Nest Theme Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 0,
+   "email": 0,
+   "export": 0,
+   "print": 1,
+   "read": 1,
+   "report": 0,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
