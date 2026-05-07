@@ -1,70 +1,12 @@
 /* ==============================================================
-   nest_theme — syn_theme.bundle.css
-   Class axes (resolved at boot, applied to <body>):
-     syn-palette-<slug>     soft-pro | crisp | warm-earth | corp-navy | minimal
-     syn-density-<slug>     compact  | cozy  | comfortable
-     syn-font-<slug>        xs | sm | md | lg | xl
-   Frappe's existing dark/light toggle stays untouched; we listen
-   to data-theme="dark|light" on <html> and ship paired variants
-   for every palette.
-   v0.1 ships ONE palette: Soft Professional.
+   nest_theme — syn_theme.bundle.css (v0.2.0)
+   Single locked palette: Soft Professional, light + dark.
+   No density / font axes — just one tightened spacing baked in.
    ============================================================== */
 
 
-/* --- font scale ------------------------------------------------ */
-/* Frappe sizes most things via rem, so bumping --base-font-size
-   on <html> scales the whole desk proportionally. We fall back to
-   explicit text-size overrides on common Frappe utility classes
-   for the few places where rem isn't honoured. */
-
-body.syn-font-xs { --syn-base-font-size: 12px; }
-body.syn-font-sm { --syn-base-font-size: 13px; }
-body.syn-font-md { --syn-base-font-size: 14px; }
-body.syn-font-lg { --syn-base-font-size: 16px; }
-body.syn-font-xl { --syn-base-font-size: 18px; }
-
-html:has(body.syn-font-xs),
-html:has(body.syn-font-sm),
-html:has(body.syn-font-md),
-html:has(body.syn-font-lg),
-html:has(body.syn-font-xl) {
-  font-size: var(--syn-base-font-size, 14px);
-}
-
-
-/* --- density --------------------------------------------------- */
-/* Tokens used by the rules below; palette CSS may also read these. */
-body.syn-density-compact     { --syn-pad-x: 8px;  --syn-pad-y: 4px;  --syn-row-h: 28px; --syn-input-h: 28px; --syn-section-pad: 8px 12px;  --syn-section-mar: 6px 0; }
-body.syn-density-cozy        { --syn-pad-x: 10px; --syn-pad-y: 6px;  --syn-row-h: 32px; --syn-input-h: 32px; --syn-section-pad: 10px 14px; --syn-section-mar: 8px 0; }
-body.syn-density-comfortable { --syn-pad-x: 12px; --syn-pad-y: 8px;  --syn-row-h: 40px; --syn-input-h: 40px; --syn-section-pad: 14px 18px; --syn-section-mar: 10px 0; }
-
-body[class*="syn-density-"] .frappe-control input.form-control,
-body[class*="syn-density-"] .frappe-control select.form-control,
-body[class*="syn-density-"] .frappe-control textarea.form-control {
-  height: var(--syn-input-h);
-  padding-top: var(--syn-pad-y);
-  padding-bottom: var(--syn-pad-y);
-}
-
-body[class*="syn-density-"] .form-section {
-  padding: var(--syn-section-pad) !important;
-  margin: var(--syn-section-mar) !important;
-}
-
-body.syn-density-compact .list-row,
-body.syn-density-compact .grid-row,
-body.syn-density-cozy    .list-row,
-body.syn-density-cozy    .grid-row {
-  min-height: var(--syn-row-h);
-}
-
-body.syn-density-compact .frappe-control { margin-bottom: 4px; }
-body.syn-density-cozy    .frappe-control { margin-bottom: 6px; }
-
-
-/* --- palette: Soft Professional (light) ----------------------- */
-body.syn-palette-soft-pro:not([data-theme="dark"]),
-html:not([data-theme="dark"]) body.syn-palette-soft-pro {
+/* --- palette tokens: Soft Pro (light) ------------------------- */
+body.syn-palette-soft-pro {
   --bg-color:           #f5f6f8;
   --fg-color:           #ffffff;
   --card-bg:            #ffffff;
@@ -88,40 +30,17 @@ html:not([data-theme="dark"]) body.syn-palette-soft-pro {
   --shadow-sm:          0 1px 2px rgba(15, 23, 42, 0.04);
   --shadow-md:          0 2px 8px rgba(15, 23, 42, 0.08);
   --shadow-lg:          0 4px 12px rgba(15, 23, 42, 0.10);
+}
 
-  background-color: var(--bg-color);
+body.syn-palette-soft-pro:not([data-theme="dark"]) {
+  background: var(--bg-color);
   color: var(--text-color);
 }
 
-body.syn-palette-soft-pro:not([data-theme="dark"]) .navbar,
-body.syn-palette-soft-pro:not([data-theme="dark"]) .sidebar {
-  background: var(--fg-color);
-  border-color: var(--card-border);
-}
 
-body.syn-palette-soft-pro:not([data-theme="dark"]) .form-section,
-body.syn-palette-soft-pro:not([data-theme="dark"]) .layout-side-section,
-body.syn-palette-soft-pro:not([data-theme="dark"]) .widget {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: 8px;
-  box-shadow: var(--shadow-sm);
-}
-
-body.syn-palette-soft-pro:not([data-theme="dark"]) .btn-primary {
-  background-color: var(--btn-primary-bg);
-  border-color: var(--btn-primary-bg);
-  color: var(--btn-primary-color);
-}
-body.syn-palette-soft-pro:not([data-theme="dark"]) .btn-primary:hover {
-  background-color: var(--primary-hover);
-  border-color: var(--primary-hover);
-}
-
-
-/* --- palette: Soft Professional (dark) ------------------------ */
-body.syn-palette-soft-pro[data-theme="dark"],
-html[data-theme="dark"] body.syn-palette-soft-pro {
+/* --- palette tokens: Soft Pro (dark) -------------------------- */
+html[data-theme="dark"] body.syn-palette-soft-pro,
+body.syn-palette-soft-pro[data-theme="dark"] {
   --bg-color:           #1a1f2e;
   --fg-color:           #232a3d;
   --card-bg:            #2a3142;
@@ -150,96 +69,243 @@ html[data-theme="dark"] body.syn-palette-soft-pro {
   color: var(--text-color);
 }
 
-body.syn-palette-soft-pro[data-theme="dark"] .navbar,
-body.syn-palette-soft-pro[data-theme="dark"] .sidebar,
-body.syn-palette-soft-pro[data-theme="dark"] .form-section,
-body.syn-palette-soft-pro[data-theme="dark"] .layout-side-section,
-body.syn-palette-soft-pro[data-theme="dark"] .widget {
+
+/* ==============================================================
+   AGGRESSIVE FORM SPACING TIGHTENING
+   v0.2 main fix — section headers were wasting too much vertical
+   space. !important liberally applied to defeat ERPNext bundle
+   specificity wars.
+   ============================================================== */
+
+
+/* Section card (the white panel surrounding fields) */
+body.syn-palette-soft-pro .form-section {
+  padding: 6px 14px !important;
+  margin: 4px 0 !important;
+  border-radius: 8px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Section heading bar — the line with label + chevron.
+   Was ~20-30px vertical padding in v16 default; tightened hard. */
+body.syn-palette-soft-pro .form-section .section-head,
+body.syn-palette-soft-pro .section-head,
+body.syn-palette-soft-pro .form-section [class*="section-head"],
+body.syn-palette-soft-pro .form-section > .head-label {
+  padding-top:    4px !important;
+  padding-bottom: 4px !important;
+  margin: 0 !important;
+  min-height: 22px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  color: var(--text-muted) !important;
+  line-height: 1.3 !important;
+}
+
+body.syn-palette-soft-pro .form-section .section-head:empty {
+  display: none !important;
+}
+
+/* Collapsible-section trigger row (e.g. Accounting Dimensions, Currency and Price List).
+   These are the tallest offenders in v16. */
+body.syn-palette-soft-pro .form-section.collapsible-section .section-head,
+body.syn-palette-soft-pro .collapsible-section .section-head,
+body.syn-palette-soft-pro [class*="collapsible"] .section-head,
+body.syn-palette-soft-pro .section-collapsible-trigger,
+body.syn-palette-soft-pro .form-section.collapsed .section-head {
+  padding-top:    6px !important;
+  padding-bottom: 6px !important;
+  min-height: 26px !important;
+  cursor: pointer;
+}
+
+/* Section body (the columns area inside) */
+body.syn-palette-soft-pro .form-section .section-body {
+  padding-top:    4px !important;
+  padding-bottom: 4px !important;
+}
+
+/* Form column wrapper */
+body.syn-palette-soft-pro .form-column {
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+}
+
+
+/* --- Field-level tightening ----------------------------------- */
+
+body.syn-palette-soft-pro .frappe-control {
+  margin-bottom: 6px !important;
+}
+
+body.syn-palette-soft-pro .control-label,
+body.syn-palette-soft-pro .frappe-control .control-label {
+  margin-bottom: 2px !important;
+  padding: 0 !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  color: var(--text-muted) !important;
+  line-height: 1.3 !important;
+}
+
+body.syn-palette-soft-pro .form-control,
+body.syn-palette-soft-pro input.form-control,
+body.syn-palette-soft-pro select.form-control,
+body.syn-palette-soft-pro .input-with-feedback {
+  min-height: 30px !important;
+  height: 30px !important;
+  padding: 4px 10px !important;
+  font-size: 13px;
+}
+
+body.syn-palette-soft-pro textarea.form-control {
+  min-height: 60px !important;
+  height: auto !important;
+  padding: 6px 10px !important;
+}
+
+/* Field with feedback (icons appended) */
+body.syn-palette-soft-pro .input-with-feedback.like-disabled-input {
+  min-height: 30px !important;
+  padding: 4px 10px !important;
+}
+
+
+/* --- List + grid rows (also too tall by default) -------------- */
+
+body.syn-palette-soft-pro .list-row,
+body.syn-palette-soft-pro .grid-row,
+body.syn-palette-soft-pro .grid-body .grid-row {
+  min-height: 32px !important;
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
+}
+
+body.syn-palette-soft-pro .list-row-container {
+  padding: 4px 0 !important;
+}
+
+
+/* --- Page head + form layout shell ---------------------------- */
+
+body.syn-palette-soft-pro .page-head {
+  padding: 6px 16px !important;
+  background: var(--fg-color);
+  border-bottom: 1px solid var(--card-border);
+}
+
+body.syn-palette-soft-pro .page-title {
+  margin-bottom: 0 !important;
+  padding: 0 !important;
+}
+
+body.syn-palette-soft-pro .form-layout {
+  padding-top: 6px !important;
+  padding-bottom: 6px !important;
+}
+
+/* Gap between successive sections / blocks */
+body.syn-palette-soft-pro .form-layout > * + * {
+  margin-top: 4px !important;
+}
+
+
+/* --- Tabs (Details / Address & Contact / Terms / More Info / Connections) */
+
+body.syn-palette-soft-pro .form-tabs-list,
+body.syn-palette-soft-pro .nav-tabs {
+  border-bottom: 1px solid var(--card-border);
+  margin-bottom: 6px !important;
+  padding: 0 12px !important;
+}
+
+body.syn-palette-soft-pro .form-tabs-list .nav-link,
+body.syn-palette-soft-pro .nav-tabs .nav-link,
+body.syn-palette-soft-pro .form-tabs .nav-link {
+  padding: 8px 14px !important;
+  font-size: 13px !important;
+  color: var(--text-muted);
+  border: none !important;
+}
+
+body.syn-palette-soft-pro .form-tabs-list .nav-link.active,
+body.syn-palette-soft-pro .nav-tabs .nav-link.active {
+  color: var(--text-color);
+  border-bottom: 2px solid var(--primary-color) !important;
+}
+
+
+/* --- Sidebar / app menu --------------------------------------- */
+
+body.syn-palette-soft-pro .layout-side-section,
+body.syn-palette-soft-pro .sidebar {
+  background: var(--fg-color);
+  border-right: 1px solid var(--card-border);
+}
+
+body.syn-palette-soft-pro .layout-side-section .sidebar-item-container {
+  padding: 4px 8px !important;
+}
+
+
+/* --- Buttons -------------------------------------------------- */
+
+body.syn-palette-soft-pro .btn {
+  font-weight: 500;
+  border-radius: 6px;
+}
+
+body.syn-palette-soft-pro .btn-primary {
+  background-color: var(--btn-primary-bg);
+  border-color: var(--btn-primary-bg);
+  color: var(--btn-primary-color);
+}
+body.syn-palette-soft-pro .btn-primary:hover {
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
+body.syn-palette-soft-pro .btn-default,
+body.syn-palette-soft-pro .btn-secondary {
+  background-color: var(--card-bg);
+  border-color: var(--card-border);
+  color: var(--text-color);
+}
+
+
+/* --- Navbar logo styling (matches the rounded SVG) ----------- */
+
+body.syn-palette-soft-pro header.desktop-navbar .navbar-home {
+  padding: 0 !important;
+  border-radius: 7px;
+  overflow: hidden;
+}
+
+body.syn-palette-soft-pro header.desktop-navbar .navbar-home img {
+  display: block;
+  width: 32px;
+  height: 32px;
+  border-radius: 7px;
+}
+
+
+/* --- Submit / status badges ---------------------------------- */
+
+body.syn-palette-soft-pro .indicator-pill {
+  font-weight: 500;
+  border-radius: 4px;
+  padding: 2px 8px !important;
+}
+
+
+/* --- Dark-mode panel overrides ------------------------------- */
+html[data-theme="dark"] body.syn-palette-soft-pro .form-section,
+html[data-theme="dark"] body.syn-palette-soft-pro .layout-side-section,
+html[data-theme="dark"] body.syn-palette-soft-pro .page-head {
   background: var(--card-bg);
   border-color: var(--card-border);
-}
-
-
-/* --- toolbar widgets ------------------------------------------ */
-.syn-toolbar-widgets {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-right: 12px;
-  height: 28px;
-}
-
-.syn-density-segment {
-  display: inline-flex;
-  border: 1px solid var(--card-border, #e5e7eb);
-  border-radius: 6px;
-  overflow: hidden;
-  background: var(--card-bg, #ffffff);
-}
-
-.syn-density-segment button {
-  appearance: none;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  padding: 4px 8px;
-  font-size: 11px;
-  color: var(--text-muted, #5b6471);
-  line-height: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 28px;
-  height: 24px;
-  transition: background 0.12s ease, color 0.12s ease;
-}
-.syn-density-segment button + button {
-  border-left: 1px solid var(--card-border, #e5e7eb);
-}
-.syn-density-segment button:hover {
-  background: var(--subtle-fg, #f0f2f5);
-  color: var(--text-color, #1f2937);
-}
-.syn-density-segment button.active {
-  background: var(--primary-color, #6b85a3);
-  color: var(--btn-primary-color, #ffffff);
-}
-
-.syn-font-scaler {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-.syn-font-scaler button {
-  appearance: none;
-  width: 24px;
-  height: 24px;
-  border: 1px solid var(--card-border, #e5e7eb);
-  border-radius: 4px;
-  background: var(--card-bg, #ffffff);
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 1;
-  color: var(--text-color, #1f2937);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.12s ease;
-}
-.syn-font-scaler button:hover {
-  background: var(--subtle-fg, #f0f2f5);
-}
-.syn-font-pct {
-  font-size: 11px;
-  color: var(--text-muted, #5b6471);
-  min-width: 36px;
-  text-align: center;
-  font-variant-numeric: tabular-nums;
-}
-
-/* On narrow screens the navbar sometimes wraps — keep widgets together */
-@media (max-width: 768px) {
-  .syn-toolbar-widgets { margin-right: 8px; gap: 6px; height: 24px; }
-  .syn-density-segment button { min-width: 24px; padding: 4px 6px; }
 }
