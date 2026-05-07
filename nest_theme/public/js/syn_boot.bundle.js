@@ -1,12 +1,19 @@
-/* nest_theme — syn_boot.bundle.js
+/* nest_theme — syn_boot.bundle.js (v0.1.1)
  *
  * 1. Apply body classes from frappe.boot.syn_classes ASAP (before paint).
  * 2. Build navbar toolbar widgets: density segment + font scaler.
+ *    - Modern v16 anchor: insert immediately before .desktop-notifications
+ *      inside header.desktop-navbar > .flex.
+ *    - Legacy fallback: .navbar .navbar-nav, filtered to skip the hidden
+ *      notification-item-tabs ul (which is what tripped v0.1).
+ *    - MutationObserver re-builds if Frappe re-renders the navbar.
+ *    - Frappe SPA router hook also re-builds on route change.
  * 3. Listen for syn_palette_changed realtime events and live-swap palette.
  * 4. Keyboard shortcuts: Ctrl+= / Ctrl+- (font), Ctrl+Shift+D (density cycle).
  *
- * Pure additive overlay — never modifies Frappe DOM beyond appending one <li>
- * to .navbar-nav. Idempotent: re-render won't duplicate widgets.
+ * v0.1.1 fix: v0.1's '.navbar .navbar-nav' selector matched the hidden
+ * notification-item-tabs <ul> in the v16 modern desk shell, so widgets were
+ * appended off-screen and got wiped on re-render.
  */
 
 (function () {
@@ -22,7 +29,6 @@
     if (!window.frappe || !frappe.boot || !frappe.boot.syn_classes) return;
     const wanted = String(frappe.boot.syn_classes).split(/\s+/).filter(Boolean);
     if (!document.body) return;
-    // Remove any prior syn-* classes (defensive on repeat applies)
     Array.from(document.body.classList)
       .filter((c) => c.startsWith('syn-'))
       .forEach((c) => document.body.classList.remove(c));
@@ -82,17 +88,33 @@
       frappe.call({
         method: 'nest_theme.api.set_user_pref',
         args:   { field: field, value: value },
-        // Silent: no toast on success/error
         callback: function () {},
       });
     }, 350);
   }
 
+  // Find where to insert. Modern v16 desk first, legacy navbar second.
+  function findAnchor() {
+    const bell = document.querySelector('header.desktop-navbar .desktop-notifications');
+    if (bell && bell.parentElement) {
+      return { mode: 'before', node: bell };
+    }
+    const navs = document.querySelectorAll('.navbar .navbar-nav');
+    for (let i = 0; i < navs.length; i++) {
+      const n = navs[i];
+      if (n.classList.contains('notification-item-tabs')) continue;
+      if (n.classList.contains('nav-tabs'))               continue;
+      if (n.offsetWidth === 0)                            continue;
+      return { mode: 'append', node: n };
+    }
+    return null;
+  }
+
   function buildWidgets() {
     if (document.querySelector('.syn-toolbar-widgets')) return;  // idempotent
-    const navbar = document.querySelector('.navbar .navbar-nav, header.navbar ul');
-    if (!navbar) return;
-    if (!frappe || !frappe.boot) return;
+    if (!window.frappe || !frappe.boot)                 return;
+    const anchor = findAnchor();
+    if (!anchor) return;
 
     const settings = frappe.boot.syn_settings || {};
     const allowDensity = settings.allow_user_density_override !== false &&
@@ -101,8 +123,8 @@
                          settings.allow_user_font_override    !== 0;
     if (!allowDensity && !allowFont) return;
 
-    const li = document.createElement('li');
-    li.className = 'syn-toolbar-widgets nav-item';
+    const wrap = document.createElement('div');
+    wrap.className = 'syn-toolbar-widgets';
 
     if (allowDensity) {
       const seg = document.createElement('div');
@@ -118,7 +140,7 @@
         btn.addEventListener('click', () => setDensity(d));
         seg.appendChild(btn);
       });
-      li.appendChild(seg);
+      wrap.appendChild(seg);
     }
 
     if (allowFont) {
@@ -147,19 +169,40 @@
       scaler.appendChild(plus);
       scaler.addEventListener('contextmenu', (e) => {
         e.preventDefault();
-        const instanceDefault = (frappe.boot.syn_settings && frappe.boot.syn_settings.default_font_scale) || 'md';
-        setFont(instanceDefault);
+        const def = (frappe.boot.syn_settings && frappe.boot.syn_settings.default_font_scale) || 'md';
+        setFont(def);
       });
-      li.appendChild(scaler);
+      wrap.appendChild(scaler);
     }
 
-    navbar.appendChild(li);
+    if (anchor.mode === 'before') {
+      anchor.node.parentElement.insertBefore(wrap, anchor.node);
+    } else {
+      anchor.node.appendChild(wrap);
+    }
+  }
+
+  // Re-build the widget if Frappe wipes the navbar / re-renders it.
+  let observer = null;
+  function attachObserver() {
+    const root = document.querySelector('header.desktop-navbar') ||
+                 document.querySelector('.navbar')               ||
+                 document.body;
+    if (!root || root._synObserved) return;
+    observer = new MutationObserver(() => {
+      if (!document.querySelector('.syn-toolbar-widgets')) {
+        buildWidgets();
+      }
+    });
+    observer.observe(root, { childList: true, subtree: true });
+    root._synObserved = true;
   }
 
   function waitForNavbar(triesLeft) {
     if (triesLeft === undefined) triesLeft = 50;  // ~10 s max
-    if (document.querySelector('.navbar .navbar-nav, header.navbar ul')) {
+    if (findAnchor()) {
       buildWidgets();
+      attachObserver();
       return;
     }
     if (triesLeft <= 0) return;
@@ -167,6 +210,19 @@
   }
   document.addEventListener('DOMContentLoaded', () => waitForNavbar());
   if (document.readyState !== 'loading') waitForNavbar();
+
+  // SPA route changes don't fire DOMContentLoaded; rebuild on Frappe nav.
+  function attachRouter() {
+    if (!window.frappe || !frappe.router || !frappe.router.on) {
+      setTimeout(attachRouter, 500);
+      return;
+    }
+    frappe.router.on('change', () => {
+      buildWidgets();
+      attachObserver();
+    });
+  }
+  attachRouter();
 
 
   // -------- 3. Realtime palette change ---------------------------------
@@ -188,7 +244,6 @@
 
   // -------- 4. Keyboard shortcuts --------------------------------------
   document.addEventListener('keydown', function (e) {
-    // Ignore when typing in an input/textarea/contenteditable
     const t = e.target;
     if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
 

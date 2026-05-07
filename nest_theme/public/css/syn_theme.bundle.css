@@ -164,10 +164,9 @@ body.syn-palette-soft-pro[data-theme="dark"] .widget {
 .syn-toolbar-widgets {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  margin-left: 12px;
-  padding-left: 10px;
-  border-left: 1px solid var(--card-border, #e5e7eb);
+  gap: 8px;
+  margin-right: 12px;
+  height: 28px;
 }
 
 .syn-density-segment {
@@ -241,6 +240,6 @@ body.syn-palette-soft-pro[data-theme="dark"] .widget {
 
 /* On narrow screens the navbar sometimes wraps — keep widgets together */
 @media (max-width: 768px) {
-  .syn-toolbar-widgets { margin-left: 6px; padding-left: 6px; gap: 6px; }
+  .syn-toolbar-widgets { margin-right: 8px; gap: 6px; height: 24px; }
   .syn-density-segment button { min-width: 24px; padding: 4px 6px; }
 }
