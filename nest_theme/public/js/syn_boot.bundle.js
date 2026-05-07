@@ -83,26 +83,47 @@
 
 
   // -------- 3. Realtime: palette + logo ------------------------------
+  // v0.3.0 fix: register only AFTER socket.connected. Frappe v16's
+  // realtime layer is rebuilt once the socket initialises, which wipes
+  // any listeners we registered against the early stub. Diagnostic in
+  // session 2026-05-07 (evening) confirmed: palette_listener_count: 1
+  // (only the user's manual one), logo_listener_count: 0. Our shipped
+  // registration silently disappeared.
+
+  function paletteHandler(data) {
+    if (!data || !data.palette) return;
+    Array.from(document.body.classList)
+      .filter((c) => c.startsWith('syn-palette-'))
+      .forEach((c) => document.body.classList.remove(c));
+    document.body.classList.add('syn-palette-' + data.palette);
+  }
+
+  function logoHandler(data) {
+    if (data && data.logo_url) {
+      frappe.boot.syn_logo_url = data.logo_url;
+      applyLogo();
+    }
+  }
+
+  function registerRealtime() {
+    if (!window.frappe || !frappe.realtime || !frappe.realtime.on) return;
+    frappe.realtime.on('syn_palette_changed', paletteHandler);
+    frappe.realtime.on('syn_logo_changed',    logoHandler);
+  }
+
   function attachRealtime() {
-    if (!window.frappe || !frappe.realtime || !frappe.realtime.on) {
+    if (!window.frappe || !frappe.realtime || !frappe.realtime.socket) {
       setTimeout(attachRealtime, 500);
       return;
     }
-
-    frappe.realtime.on('syn_palette_changed', (data) => {
-      if (!data || !data.palette) return;
-      Array.from(document.body.classList)
-        .filter((c) => c.startsWith('syn-palette-'))
-        .forEach((c) => document.body.classList.remove(c));
-      document.body.classList.add('syn-palette-' + data.palette);
-    });
-
-    frappe.realtime.on('syn_logo_changed', (data) => {
-      if (data && data.logo_url) {
-        frappe.boot.syn_logo_url = data.logo_url;
-        applyLogo();
-      }
-    });
+    const sock = frappe.realtime.socket;
+    if (sock.connected) {
+      registerRealtime();
+    } else {
+      sock.on('connect', registerRealtime);
+    }
+    // Re-register if socket disconnects + reconnects (Frappe may wipe).
+    sock.on('reconnect', registerRealtime);
   }
   attachRealtime();
 })();
