@@ -3,7 +3,7 @@ app_title       = "Nest Theme"
 app_publisher   = "Syncflo"
 app_description = "Syncflo internal: 5-palette theme switcher + customer logo branding for Frappe v16"
 app_email       = "ops@syncflo.co.za"
-app_license     = "MIT"
+app_license     = "Proprietary"
 
 app_include_css = "syn_theme.bundle.css"
 app_include_js  = "syn_boot.bundle.js"
